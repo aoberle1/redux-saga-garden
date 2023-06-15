@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { useDispatch, useSelector} from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 
 function PlantList() {
@@ -10,8 +10,12 @@ function PlantList() {
     useEffect(() => {
         console.log('component did mount');
         // dispatch an action to request the plantList from the API
-        dispatch( { type: 'FETCH_PLANTS'} );
-    }, []); 
+        dispatch({ type: 'FETCH_PLANTS' });
+    }, []);
+
+const deletePlant = (plantID) => {
+    dispatch({ type: 'DELETE_PLANT', payload: plantID})
+}
 
     return (
         <div>
@@ -19,7 +23,10 @@ function PlantList() {
             <pre>{JSON.stringify((reduxState))}</pre>
             <ul>
                 {reduxState.map((plant) => (
-                    <li key={plant.id}>{plant.name}</li>
+                    <form key={plant.id} onSubmit={() => deletePlant(plant.id)}>
+                        <li>{plant.name}</li>
+                        <input type='submit' value='DELETE' />
+                    </form>
                 ))}
             </ul>
         </div>

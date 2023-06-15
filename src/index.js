@@ -47,6 +47,7 @@ function* fetchPlants() {
 function* postPlant(action) {
   try {
     yield axios.post('/api/plant', action.payload);
+    console.log('action is:', action)
     console.log('action.payload is:', action.payload);
     yield put({ type: 'FETCH_PLANTS' })
   } catch(error) {
@@ -54,9 +55,20 @@ function* postPlant(action) {
   }
 }
 
+function* deletePlant(action) {
+  try {
+    console.log('action.payload is:', action.payload)
+    yield axios.delete(`/api/plant/${action.payload}`)
+    yield put({ type: 'FETCH_PLANTS' })
+  } catch(error) {
+    console.log('Error in deletePlant function:', error)
+  }
+}
+
 function* rootSaga () {
-  yield takeLatest( 'FETCH_PLANTS', fetchPlants)
-  yield takeLatest( 'ADD_PLANT', postPlant)
+  yield takeLatest( 'FETCH_PLANTS', fetchPlants);
+  yield takeLatest( 'ADD_PLANT', postPlant);
+  yield takeLatest( 'DELETE_PLANT', deletePlant)
 }
 
 sagaMiddleware.run(rootSaga);
